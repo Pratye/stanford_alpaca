@@ -186,7 +186,8 @@ def train():
     model = transformers.AutoModelForCausalLM.from_pretrained(
         model_args.model_name_or_path,
         cache_dir=training_args.cache_dir,
-        load_in_8bit=True
+        load_in_8bit=True,
+        device_map=True
     )
 
     tokenizer = transformers.AutoTokenizer.from_pretrained(
