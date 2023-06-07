@@ -187,7 +187,7 @@ def train():
         model_args.model_name_or_path,
         cache_dir=training_args.cache_dir,
         load_in_8bit=True,
-        device_map=True
+        device_map='auto'
     )
 
     tokenizer = transformers.AutoTokenizer.from_pretrained(
