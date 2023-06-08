@@ -19,7 +19,8 @@ import torch
 import tqdm
 import transformers
 from train import smart_tokenizer_and_embedding_resize
-
+import sys
+#sys.setrecursionlimit(15000)
 
 @torch.inference_mode()
 def make_diff(
@@ -34,15 +35,19 @@ def make_diff(
     """
     model_tuned: transformers.PreTrainedModel = transformers.AutoModelForCausalLM.from_pretrained(
         path_tuned,
-        device_map={"": torch.device(device)},
-        torch_dtype=torch.float32,
-        low_cpu_mem_usage=True,
+#        device_map={"": torch.device(device)},
+#        torch_dtype=torch.float16,
+#        low_cpu_mem_usage=True,
+        load_in_8bit=True,
+        device_map='auto'
     )
     model_raw: transformers.PreTrainedModel = transformers.AutoModelForCausalLM.from_pretrained(
         path_raw,
-        device_map={"": torch.device(device)},
-        torch_dtype=torch.float32,
-        low_cpu_mem_usage=True,
+#        device_map={"": torch.device(device)},
+#        torch_dtype=torch.float16,
+#        low_cpu_mem_usage=True,
+        load_in_8bit=True,
+        device_map='auto'
     )
 
     tokenizer_tuned: transformers.PreTrainedTokenizer = transformers.AutoTokenizer.from_pretrained(
@@ -95,15 +100,19 @@ def recover(
     """
     model_raw: transformers.PreTrainedModel = transformers.AutoModelForCausalLM.from_pretrained(
         path_raw,
-        device_map={"": torch.device(device)},
-        torch_dtype=torch.float32,
-        low_cpu_mem_usage=True,
+#        device_map={"": torch.device(device)},
+#        torch_dtype=torch.float32,
+#        low_cpu_mem_usage=True,
+        load_in_8bit=True,
+        device_map='auto'
     )
     model_recovered: transformers.PreTrainedModel = transformers.AutoModelForCausalLM.from_pretrained(
         path_diff,
-        device_map={"": torch.device(device)},
-        torch_dtype=torch.float32,
-        low_cpu_mem_usage=True,
+#        device_map={"": torch.device(device)},
+#        torch_dtype=torch.float32,
+#        low_cpu_mem_usage=True,
+        load_in_8bit=True,
+        device_map='auto'
     )
 
     tokenizer_raw: transformers.PreTrainedTokenizer = transformers.AutoTokenizer.from_pretrained(
